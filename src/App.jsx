@@ -110,11 +110,11 @@ function QueueTab() {
 
   const filterBtns = [
     { key: 'all', label: 'All', style: {} },
-    { key: 1, label: 'P1 Urgent', style: { color: '#f85149' } },
-    { key: 2, label: 'P2 High',   style: { color: '#f0883e' } },
-    { key: 3, label: 'P3 Stuck',  style: { color: '#e3b341' } },
-    { key: 4, label: 'P4 Monitor',style: { color: '#8b949e' } },
-    { key: 5, label: 'P5 Unreviewed', style: { color: '#58a6ff' } },
+    { key: 1, label: 'P1 Urgent',     style: { color: '#cf222e' } },
+    { key: 2, label: 'P2 High',       style: { color: '#bc4c00' } },
+    { key: 3, label: 'P3 Stuck',      style: { color: '#7d4e00' } },
+    { key: 4, label: 'P4 Monitor',    style: { color: '#656d76' } },
+    { key: 5, label: 'P5 Unreviewed', style: { color: '#0550ae' } },
   ]
 
   return (
@@ -150,12 +150,12 @@ function QueueTab() {
         </div>
         <div className="stat-card">
           <div className="stat-label">P4 Monitor</div>
-          <div className="stat-val" style={{ color: '#8b949e' }}>{counts[4]}</div>
+          <div className="stat-val" style={{ color: '#656d76' }}>{counts[4]}</div>
           <div className="stat-sub">Honor driving</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">P5 Unreviewed</div>
-          <div className="stat-val" style={{ color: '#58a6ff' }}>{counts[5]}</div>
+          <div className="stat-val" style={{ color: '#0550ae' }}>{counts[5]}</div>
           <div className="stat-sub">needs triage</div>
         </div>
       </div>
@@ -177,6 +177,26 @@ function QueueTab() {
       </div>
 
       <div className="showing-info">Showing {filtered.length} of {CASES.length} cases</div>
+
+      <div className="priority-logic">
+        <div>
+          <div className="logic-col-title auto">Auto-derived from data</div>
+          <ul className="logic-items">
+            <li><strong>rp_honor</strong> — derived from loan balance field</li>
+            <li><strong>Financed vs non-financed</strong> — deterministic at policy creation</li>
+            <li><strong>RP flow direction</strong> — Honor vs agency vs insured</li>
+          </ul>
+        </div>
+        <div className="logic-divider" />
+        <div>
+          <div className="logic-col-title judgment">Requires Sarah's judgment</div>
+          <ul className="logic-items">
+            <li><strong>Audit / noc_resent / expired</strong> stuck codes</li>
+            <li><strong>Whether wholesaler</strong> returned expected RP amount</li>
+            <li><strong>When to hand off</strong> to Honor vs continue collecting</li>
+          </ul>
+        </div>
+      </div>
 
       {filtered.length === 0
         ? <div className="empty-state">No cases match your filter.</div>
@@ -210,7 +230,7 @@ function QueueTab() {
                       <td>
                         <div className="carrier-name">
                           {row.carrier}
-                          {row.carrierEmail && <span style={{ color: '#58a6ff', fontSize: 10, marginLeft: 4 }}>✉</span>}
+                          {row.carrierEmail && <span style={{ color: '#0550ae', fontSize: 10, marginLeft: 4 }}>✉</span>}
                         </div>
                         <div className="carrier-sub">{row.wholesaler || 'Direct carrier'}</div>
                       </td>
@@ -264,8 +284,8 @@ function DataHealthTab() {
         labels: ['P1 Urgent', 'P2 High', 'P3 Stuck', 'P4 Monitor', 'P5 Unreviewed'],
         datasets: [{
           data: priorityTotals,
-          backgroundColor: ['rgba(248,81,73,.45)', 'rgba(240,136,62,.45)', 'rgba(227,179,65,.45)', 'rgba(139,148,158,.35)', 'rgba(88,166,255,.35)'],
-          borderColor: ['#f85149', '#f0883e', '#e3b341', '#8b949e', '#58a6ff'],
+          backgroundColor: ['rgba(207,34,46,.18)', 'rgba(188,76,0,.18)', 'rgba(125,78,0,.18)', 'rgba(101,109,118,.14)', 'rgba(5,80,174,.14)'],
+          borderColor: ['#cf222e', '#bc4c00', '#7d4e00', '#656d76', '#0550ae'],
           borderWidth: 1,
         }],
       },
@@ -274,8 +294,8 @@ function DataHealthTab() {
         responsive: true,
         plugins: { legend: { display: false } },
         scales: {
-          x: { ticks: { color: '#8b949e', font: { size: 10 }, callback: v => '$' + (v / 1000).toFixed(0) + 'k' }, grid: { color: 'rgba(33,38,45,.9)' } },
-          y: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { display: false } },
+          x: { ticks: { color: '#656d76', font: { size: 10 }, callback: v => '$' + (v / 1000).toFixed(0) + 'k' }, grid: { color: '#e8edf1' } },
+          y: { ticks: { color: '#656d76', font: { size: 10 } }, grid: { display: false } },
         },
       },
     })
@@ -290,8 +310,8 @@ function DataHealthTab() {
         labels: topOrgs.map(o => o[0]),
         datasets: [{
           data: topOrgs.map(o => Math.round(o[1])),
-          backgroundColor: 'rgba(88,166,255,.35)',
-          borderColor: '#58a6ff',
+          backgroundColor: 'rgba(5,80,174,.14)',
+          borderColor: '#0550ae',
           borderWidth: 1,
         }],
       },
@@ -299,8 +319,8 @@ function DataHealthTab() {
         responsive: true,
         plugins: { legend: { display: false } },
         scales: {
-          y: { ticks: { color: '#8b949e', font: { size: 10 }, callback: v => '$' + (v / 1000).toFixed(0) + 'k' }, grid: { color: 'rgba(33,38,45,.9)' } },
-          x: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { display: false } },
+          y: { ticks: { color: '#656d76', font: { size: 10 }, callback: v => '$' + (v / 1000).toFixed(0) + 'k' }, grid: { color: '#e8edf1' } },
+          x: { ticks: { color: '#656d76', font: { size: 10 } }, grid: { display: false } },
         },
       },
     })
@@ -332,9 +352,13 @@ function DataHealthTab() {
 
       <div className="section-title">Data Gaps &amp; Structural Issues</div>
       <div className="gap-grid">
-        <div className="gap-card" style={{ borderLeftColor: '#f85149' }}>
-          <div className="gap-title" style={{ color: '#f85149' }}>Honor mismatch — 2 different stages</div>
-          <div className="gap-body"><strong>160 cases</strong> marked handed_off. Only <strong>40 tagged rp_honor</strong>. These track different things: rp_honor = carrier confirmed RP is flowing (still monitored). handed_off = Ascend escalated because it couldn't collect. 9 cases overlap. This two-stage funnel is invisible in the current tool — Sarah holds it in her head.</div>
+        <div className="gap-card" style={{ borderLeftColor: '#cf222e' }}>
+          <div className="gap-title" style={{ color: '#cf222e' }}>Honor mismatch — two-stage funnel, not a data error</div>
+          <div className="gap-body">
+            <strong>rp_honor (40 cases)</strong> = carrier confirmed RP is flowing to Honor, money not yet landed, Sarah still monitors.{' '}
+            <strong>handed_off (160 cases)</strong> = Ascend escalated because it couldn't collect, Honor now driving.{' '}
+            <strong>9 cases are both.</strong> This is a two-stage funnel — and it's currently invisible in the tool. Sarah holds the distinction in her head.
+          </div>
         </div>
         <div className="gap-card">
           <div className="gap-title">No definition of "done"</div>
@@ -348,19 +372,47 @@ function DataHealthTab() {
           <div className="gap-title">127 cases missing carrier email</div>
           <div className="gap-body"><strong>46% of cases</strong> have no carrier email on file. If the wholesaler goes silent, there is no escalation path available in the system. Sarah has to find contacts manually, costing time on every stuck case.</div>
         </div>
+        <div className="gap-card" style={{ gridColumn: '1 / -1', borderLeftColor: '#bc4c00' }}>
+          <div className="gap-title" style={{ color: '#bc4c00' }}>No formal SLA or escalation path</div>
+          <div className="gap-body">Finance hears about slippage reactively. <strong>Sarah is the only consistent owner across all 277 cases.</strong> The tool should surface aging cases proactively so escalation happens before finance asks — not after.</div>
+        </div>
       </div>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #21262d', margin: '28px 0' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #d0d7de', margin: '28px 0' }} />
 
       <div className="section-title">Automation Opportunity</div>
       <div className="gap-grid">
-        <div className="gap-card" style={{ borderLeftColor: '#3fb950' }}>
-          <div className="gap-title" style={{ color: '#3fb950' }}>rp_honor — fully automatable today</div>
+        <div className="gap-card" style={{ borderLeftColor: '#1a7f37' }}>
+          <div className="gap-title" style={{ color: '#1a7f37' }}>rp_honor — fully automatable today</div>
           <div className="gap-body"><strong>100% correlation</strong>: every case with a Loan Balance Remaining value is tagged rp_honor — no exceptions. This tag requires zero human judgment. A single rule derivable from existing data. Sarah is manually applying a tag the system could auto-generate.</div>
         </div>
-        <div className="gap-card" style={{ borderLeftColor: '#e3b341' }}>
-          <div className="gap-title" style={{ color: '#e3b341' }}>not_cancelled — partially automatable</div>
+        <div className="gap-card" style={{ borderLeftColor: '#7d4e00' }}>
+          <div className="gap-title" style={{ color: '#7d4e00' }}>not_cancelled — partially automatable</div>
           <div className="gap-body">This tag signals the supplier hasn't updated their system yet. Could be auto-applied when Ascend's system shows canceled_program but no supplier confirmation exists. Requires a <strong>supplier sync signal</strong> — a feed indicating whether the carrier/wholesaler has confirmed the cancellation on their end.</div>
+        </div>
+      </div>
+
+      <hr style={{ border: 'none', borderTop: '1px solid #d0d7de', margin: '28px 0' }} />
+
+      <div className="section-title">Lever Framework</div>
+      <div className="lever-grid">
+        <div className="lever-card">
+          <div className="lever-type data">Data lever</div>
+          <div className="lever-card-title">Upstream data model</div>
+          <div className="lever-body">Encode rp_agency / rp_insured routing at policy creation. Define the two Honor stages as separate fields: <strong>carrier_confirmed</strong> vs <strong>escalated_to_honor</strong> — eliminating the invisible funnel Sarah currently tracks manually.</div>
+          <div className="cost-tag cost-high">High cost · different owner</div>
+        </div>
+        <div className="lever-card">
+          <div className="lever-type tooling">Tooling lever</div>
+          <div className="lever-card-title">Priority-sorted queue</div>
+          <div className="lever-body">Auto-derive rp_honor tag from loan balance. Priority-sorted queue replaces flat list. Monitoring view for handed-off cases. Definition of done enforced at case level — queue shrinks instead of grows.</div>
+          <div className="cost-tag cost-low">Low cost · build now</div>
+        </div>
+        <div className="lever-card">
+          <div className="lever-type ops">Ops behavior lever</div>
+          <div className="lever-card-title">Workflow discipline</div>
+          <div className="lever-body">NOC cadence for not_cancelled cases — auto-flag after 7 days with no supplier update. Outreach logging as part of every action. Sarah retires cases on resolution so the queue reflects real open work.</div>
+          <div className="cost-tag cost-med">Medium cost · ops change</div>
         </div>
       </div>
     </>
